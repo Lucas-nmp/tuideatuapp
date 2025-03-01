@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Latest index{% endblock %}
+
+{% block body %}
+    <h1>Latest index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>DateLatest</th>
+                <th>Description</th>
+                <th>UrlImg</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for latest in latests %}
+            <tr>
+                <td>{{ latest.id }}</td>
+                <td>{{ latest.title }}</td>
+                <td>{{ latest.dateLatest ? latest.dateLatest|date('Y-m-d') : '' }}</td>
+                <td>{{ latest.description }}</td>
+                <td>{{ latest.urlImg }}</td>
+                <td>
+                    <a href="{{ path('app_latest_show', {'id': latest.id}) }}">show</a>
+                    <a href="{{ path('app_latest_edit', {'id': latest.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_latest_new') }}">Create new</a>
+{% endblock %}

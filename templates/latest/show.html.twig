@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Latest{% endblock %}
+
+{% block body %}
+    <h1>Latest</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ latest.id }}</td>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td>{{ latest.title }}</td>
+            </tr>
+            <tr>
+                <th>DateLatest</th>
+                <td>{{ latest.dateLatest ? latest.dateLatest|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ latest.description }}</td>
+            </tr>
+            <tr>
+                <th>UrlImg</th>
+                <td>{{ latest.urlImg }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_latest_index') }}">back to list</a>
+
+    <a href="{{ path('app_latest_edit', {'id': latest.id}) }}">edit</a>
+
+    {{ include('latest/_delete_form.html.twig') }}
+{% endblock %}

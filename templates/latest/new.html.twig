@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Latest{% endblock %}
+
+{% block body %}
+    <h1>Create new Latest</h1>
+
+    {{ include('latest/_form.html.twig') }}
+
+    <a href="{{ path('app_latest_index') }}">back to list</a>
+{% endblock %}
