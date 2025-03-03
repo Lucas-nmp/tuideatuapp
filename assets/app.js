@@ -9,57 +9,82 @@ import './styles/johndoe.css';
 
 console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
 
-$(document).ready(function(){
-    $(".navbar .nav-link").on('click', function(event) {
-
-        if (this.hash !== "") {
-
-            event.preventDefault();
-
-            var hash = this.hash;
-
-            $('html, body').animate({
-                scrollTop: $(hash).offset().top
-            }, 700, function(){
-                window.location.hash = hash;
+// Asegurarse de que Turbo esté disponible
+if (typeof Turbo !== "undefined") {
+    // 1. Smooth Scroll para Navbar (usando Turbo Events)
+    document.addEventListener("turbo:load", function() {
+        // Smooth scroll para enlaces con hash
+        document.querySelectorAll('a[href*="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(event) {
+                const href = this.getAttribute('href');
+                const hashIndex = href.indexOf('#');
+                
+                // Si el enlace contiene un hash
+                if (hashIndex !== -1) {
+                    const path = href.substring(0, hashIndex);
+                    const hash = href.substring(hashIndex);
+                    
+                    // Si el hash no pertenece a la página actual
+                    if (path !== window.location.pathname) {
+                        event.preventDefault();
+                        
+                        // Navegar a la ruta principal primero
+                        Turbo.visit(path + hash, { action: "replace" });
+                    } else {
+                        // Smooth scroll en la misma página
+                        event.preventDefault();
+                        const target = document.querySelector(hash);
+                        if (target) {
+                            target.scrollIntoView({ 
+                                behavior: 'smooth',
+                                block: 'start' 
+                            });
+                        }
+                    }
+                }
             });
-        } 
-    });
-});
-
-// protfolio filters
-$(window).on("load", function() {
-    var t = $(".portfolio-container");
-    t.isotope({
-        filter: ".new",
-        animationOptions: {
-            duration: 750,
-            easing: "linear",
-            queue: !1
+        });
+    
+        // Scroll automático al hash después de cargar la página
+        const urlHash = window.location.hash;
+        if (urlHash) {
+            const target = document.querySelector(urlHash);
+            if (target) {
+                target.scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'start' 
+                });
+            }
         }
-    }), $(".filters a").click(function() {
-        $(".filters .active").removeClass("active"), $(this).addClass("active");
-        var i = $(this).attr("data-filter");
-        return t.isotope({
-            filter: i,
+    });
+
+    // 2. Filtros de Portfolio con Isotope
+    document.addEventListener("turbo:load", function() {
+        var t = $(".portfolio-container");
+        t.isotope({
+            filter: ".new",
             animationOptions: {
                 duration: 750,
                 easing: "linear",
                 queue: !1
             }
-        }), !1
+        }), $(".filters a").click(function() {
+            $(".filters .active").removeClass("active"), $(this).addClass("active");
+            var i = $(this).attr("data-filter");
+            return t.isotope({
+                filter: i,
+                animationOptions: {
+                    duration: 750,
+                    easing: "linear",
+                    queue: !1
+                }
+            }), !1
+        });
     });
-});
+
+    
+    
+        
+}
 
 
-const nav = document.querySelector("#nav");
-const abrir = document.querySelector("#abrir");
-const cerrar = document.querySelector("#cerrar");
-
-abrir.addEventListener("click", () => {
-    nav.classList.add("visible");
-})
-
-cerrar.addEventListener("click", () => {
-    nav.classList.remove("visible");
-})
