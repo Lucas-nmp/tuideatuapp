@@ -13,49 +13,20 @@ console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
 if (typeof Turbo !== "undefined") {
     // 1. Smooth Scroll para Navbar (usando Turbo Events)
     document.addEventListener("turbo:load", function() {
-        // Smooth scroll para enlaces con hash
-        document.querySelectorAll('a[href*="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(event) {
-                const href = this.getAttribute('href');
-                const hashIndex = href.indexOf('#');
-                
-                // Si el enlace contiene un hash
-                if (hashIndex !== -1) {
-                    const path = href.substring(0, hashIndex);
-                    const hash = href.substring(hashIndex);
-                    
-                    // Si el hash no pertenece a la página actual
-                    if (path !== window.location.pathname) {
-                        event.preventDefault();
-                        
-                        // Navegar a la ruta principal primero
-                        Turbo.visit(path + hash, { action: "replace" });
-                    } else {
-                        // Smooth scroll en la misma página
-                        event.preventDefault();
-                        const target = document.querySelector(hash);
-                        if (target) {
-                            target.scrollIntoView({ 
-                                behavior: 'smooth',
-                                block: 'start' 
-                            });
-                        }
+        // Delegación de eventos para enlaces dinámicos
+        $(document).on("click", ".navbar .nav-link", function(event) {
+            if (this.hash !== "") {
+                event.preventDefault();
+                const hash = this.hash;
+                $("html, body").animate(
+                    { scrollTop: $(hash).offset().top },
+                    700,
+                    function() {
+                        window.history.replaceState(null, null, hash); // Actualiza la URL sin recargar
                     }
-                }
-            });
-        });
-    
-        // Scroll automático al hash después de cargar la página
-        const urlHash = window.location.hash;
-        if (urlHash) {
-            const target = document.querySelector(urlHash);
-            if (target) {
-                target.scrollIntoView({ 
-                    behavior: 'smooth',
-                    block: 'start' 
-                });
+                );
             }
-        }
+        });
     });
 
     // 2. Filtros de Portfolio con Isotope
