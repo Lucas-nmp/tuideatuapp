@@ -1,12 +1,79 @@
 {{ form_start(form, { 'attr': { 'enctype': 'multipart/form-data' } }) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
 
-    <div class="form-group">
+<div class="row mt-5">
+    <div class="col-md-6">
+        <div class="form-group">
+            {{ form_label(form.title, null, {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.title, {
+                'attr': {
+                    'class': 'form-control',
+                    'placeholder': 'Title'
+                }
+            }) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.description, null, {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.description, {
+                'attr': {
+                    'class': 'form-control',
+                    'rows': '3',
+                    'placeholder': 'Escribe la descripción aquí...'
+                }
+            }) }}
+        </div>
+        
+    </div>
+
+    <div class="col-md-6">
+        
+        <div class="form-group">
+            {{ form_label(form.url, null, {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.url, {
+                'attr': {
+                    'class': 'form-control',
+                    'placeholder': 'Url'
+                }
+            }) }}
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    {{ form_label(form.class, null, {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.class, {
+                        'attr': {
+                            'class': 'form-control ' ~ (form.class.vars.valid ? '' : 'is-invalid'),
+                            'required': 'required'  # Validación HTML5
+                        }
+                    }) }}
+                    <div class="invalid-feedback">
+                        {{ form_errors(form.class) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    <div class="form-group mt-4">
         <label for="image">Imágen:</label>
         <div class="input-group">   
             <input type="file" class="form-control-file" id="image" name="imageFile" accept="image/*">  
         </div>
     </div>
+
+
+
+    <button class="btn btn-success mb-5">{{ button_label|default('Save') }}</button>
+    <a class="btn btn-secondary mb-5" href="{{ path('app_project_index') }}">back to list</a>
+
+ 
 {{ form_end(form) }}
+
 
