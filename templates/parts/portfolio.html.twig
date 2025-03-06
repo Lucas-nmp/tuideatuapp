@@ -3,33 +3,36 @@
         <h1 class="mb-5"><span class="text-danger">My</span> Portfolio</h1>
         <div class="portfolio">
             <div class="filters">
-                <a href="#" data-filter=".new" class="active">
-                    New
+                <a href="#" data-filter=".inProgress" class="active">
+                    In progress
                 </a>
-                <a href="#" data-filter=".advertising">
-                    Advertising
+                <a href="#" data-filter=".onlineStore">
+                    Online store
                 </a>
-                <a href="#" data-filter=".branding">
-                    Branding
+                <a href="#" data-filter=".management">
+                    Management applications
                 </a>
-                <a href="#" data-filter=".web">
-                    Web
+                <a href="#" data-filter=".personal">
+                    Personal web
                 </a>
             </div>
             <div class="portfolio-container"> 
-                <div class="col-md-6 col-lg-4 web new">
-                    <div class="portfolio-item">
-                        <img src="img/branding-1.jpg" class="img-fluid" alt="Download free bootstrap 4 admin dashboard, free boootstrap 4 templates">   
-
-                        <div class="content-holder">
-                            <a class="img-popup" href="assets/imgs/web-1.jpg"></a>
-                            <div class="text-holder">
-                                <h6 class="title">WEB</h6>
-                                <p class="subtitle">Expedita corporis doloremque velit in totam!</p>
-                            </div>
-                        </div>   
-                    </div>             
-                </div>
+            
+                {% for project in projects %}
+                    <div class="col-md-6 col-lg-4 {{ project.class }}">
+                        <div class="portfolio-item">
+                            <img src="{{ asset('img/' ~ project.image) }}" class="img-fluid" alt="Imagen de {{ project.title }}">
+                            <div class="content-holder">
+                                
+                                <div class="text-holder">
+                                    <h6 class="title">{{ project.title }}</h6>
+                                    <p class="subtitle">{{ project.description }}</p>
+                                </div>
+                            </div>   
+                        </div>             
+                    </div>
+                {% endfor %}
+                <!-- 
                 <div class="col-md-6 col-lg-4 web new">
                     <div class="portfolio-item">
                         <img src="img/branding-1.jpg" class="img-fluid" alt="Download free bootstrap 4 admin dashboard, free boootstrap 4 templates">   
@@ -187,6 +190,7 @@
                     </div>                                                   
                 </div>
             </div> 
+            -->
         </div>  
     </div>            
 </section>

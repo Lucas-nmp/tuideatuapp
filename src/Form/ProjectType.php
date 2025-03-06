@@ -6,6 +6,7 @@ use App\Entity\Project;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class ProjectType extends AbstractType
 {
@@ -15,8 +16,18 @@ class ProjectType extends AbstractType
             ->add('title')
             ->add('description')
             ->add('url')
-            ->add('class')
-            ->add('image')
+            
+            ->add('class', ChoiceType::class, [
+                'choices' => [
+                    'Select class' => null, 
+                    'In progress' => 'inProgress',
+                    'Online Store' => 'onlineStore',
+                    'Management applications' => 'management',
+                    'Personal web' => 'personal',
+                ],
+            ])
+
+            
         ;
     }
 

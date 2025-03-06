@@ -30,8 +30,39 @@ final class ProjectController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            
+            $image = $request->files->get('imageFile');  
+
+            if ($image) {
+                $uploadDir = $this->getParameter('kernel.project_dir') . '/public/img/';
+
+                if (!is_dir($uploadDir)) {
+                    mkdir($uploadDir, 0777, true);
+                }
+
+                if ($image->isValid() && in_array($image->getMimeType(), ['image/jpeg', 'image/png', 'image/gif'])) {
+                    try {
+                        
+                        $safeTitle = preg_replace('/[^a-zA-Z0-9-_]/', '_', $project->getTitle());
+                        $newFilename = $safeTitle . '.' . $image->guessExtension();
+
+                        $image->move($uploadDir, $newFilename);
+
+                        
+                        $project->setImage($newFilename);
+                    } catch (FileException $e) {
+                        $this->addFlash('error', 'No se pudo subir la imagen: ' . $e->getMessage());
+                    }
+                } else {
+                    $this->addFlash('error', 'Archivo no válido: ' . $image->getClientOriginalName());
+                }
+            } else {
+                $this->addFlash('error', 'No se seleccionó ninguna imagen.');
+            }
+
             $entityManager->persist($project);
-            $entityManager->flush();
+            $entityManager->flush();  
 
             return $this->redirectToRoute('app_project_index', [], Response::HTTP_SEE_OTHER);
         }
